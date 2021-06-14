@@ -6,8 +6,13 @@ import gql from 'graphql-tag';
 // This query is executed at run time by Apollo.
 const APOLLO_QUERY = gql`
 {
-  message
+  bookmark {
+    id
+    url
+    desc
+  }
 }
+
 `;
 
 export default function Home() {
@@ -15,14 +20,22 @@ export default function Home() {
   console.log(`data`, data)
 
   return (
-      <div>
-        <h2>Data Received from Apollo Client at runtime from Serverless Function:</h2>
-        {loading && <p>Loading Client Side Querry...</p>}
-        {error && <p>Error: ${error.message}</p>}
-        {data && data.message && (
-          <div>{data.message}</div>
-        )}
-      </div>
+    <div>
+      <h2>Data Received from Apollo Client at runtime from Serverless Function:</h2>
+      {loading && <p>Loading...</p>}
+      {error && <p>Error: ${error.message}</p>}
+      {data && data.bookmark && (
+        <div>
+          <ul>
+            {data.bookmark.map(obj => {
+              return (
+                <li key={obj.id} >{obj.url} <br /> {obj.desc}</li>
+              )
+            })}
+          </ul>
+        </div>
+      )}
+    </div>
   );
-    
+
 }
