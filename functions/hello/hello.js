@@ -1,11 +1,15 @@
-// Docs on event and context https://www.netlify.com/docs/functions/#the-handler-method
+
+require("dotenv").config()
+
 const handler = async (event) => {
   try {
     // const subject = event.queryStringParameters.name || 'World'
+
     const name = "Ubaid Ali"
+    const client = process.env.FAUNADB_CLIENT
     return {
       statusCode: 200,
-      body: JSON.stringify({ message: `Hello ${name}` }),
+      body: JSON.stringify({ message: `Hello ${name}`, client }),
       // // more keys you can return:
       // headers: { "headerName": "headerValue", ... },
       // isBase64Encoded: true,
