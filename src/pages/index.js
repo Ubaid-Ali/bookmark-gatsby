@@ -20,23 +20,37 @@ const useStyles = makeStyles(theme => ({
     flexGrow: 1,
     fontWeight: 500,
     backgroundColor: "#00e676",
-    padding: "2%",
+    fontFamily: [
+      "-apple-system",
+      "BlinkMacSystemFont",
+      '"Segoe UI"',
+      "Roboto",
+      '"Helvetica Neue"',
+      "Arial",
+      "sans-serif",
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(","),
   },
   grid: {
     marginTop: "10px",
     boxShadow: "0 0 4px #1b5e20",
+    marginLeft: "5%",
+    marginRight: "5%",
   },
   paper: {
     padding: theme.spacing(2),
     textAlign: "center",
     color: theme.palette.text.secondary,
-    backgroundColor: "",
   },
   inputLink: {
     width: "80%",
+    fontSize: "20px",
   },
   inputDesc: {
     width: "80%",
+    fontSize: "20px",
   },
   button: {
     margin: theme.spacing(1),
@@ -46,6 +60,11 @@ const useStyles = makeStyles(theme => ({
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
+    textAlign: "left",
+  },
+  bookmark_url: {
+    fontSize: "20px",
+    color: "#03a1fc",
   },
 }))
 
@@ -73,7 +92,7 @@ export default function Home() {
 
   const { loading, error, data } = useQuery(APOLLO_QUERY)
   const [addBookmark] = useMutation(addBookmarkMutation)
-  console.log(`data`, data)
+  // console.log(`data`, data)
 
   let textfield
   let desc
@@ -86,13 +105,17 @@ export default function Home() {
       },
       refetchQueries: [{ query: APOLLO_QUERY }],
     })
+    textfield = ""
+    desc = ""
   }
 
   return (
     <div className={classes.root}>
       <Grid item xs={12} className={classes.grid}>
         <Paper className={classes.paper}>
-          <h2>Bookmark Application</h2>
+          <h2 style={{ color: "#059947", fontSize: "30px" }}>
+            Bookmark Application
+          </h2>
         </Paper>
       </Grid>
       <Grid item xs={12} className={classes.grid}>
@@ -128,8 +151,10 @@ export default function Home() {
         </form>
       </Grid>
       <Grid item xs={12} className={classes.grid}>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error: ${error.message}</p>}
+        {loading && <Paper className={classes.paper}>Loading...</Paper>}
+        {error && (
+          <Paper className={classes.paper}>Error: ${error.message}</Paper>
+        )}
         {data && data.bookmark && (
           <Paper className={classes.paper}>
             <ul>
@@ -143,7 +168,14 @@ export default function Home() {
                       id="panel1a-header"
                     >
                       <Typography className={classes.heading}>
-                        {b.url}
+                        <a
+                          href={b.url}
+                          component="button"
+                          variant="body2"
+                          className={classes.bookmark_url}
+                        >
+                          {b.url}
+                        </a>
                       </Typography>
                     </AccordionSummary>
 
