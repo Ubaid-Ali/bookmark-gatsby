@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import gql from "graphql-tag"
 
@@ -8,18 +8,19 @@ import Paper from "@material-ui/core/Paper"
 import Grid from "@material-ui/core/Grid"
 import TextareaAutosize from "@material-ui/core/TextareaAutosize"
 import Button from "@material-ui/core/Button"
-import Accordion from "@material-ui/core/Accordion"
-import AccordionSummary from "@material-ui/core/AccordionSummary"
-import AccordionDetails from "@material-ui/core/AccordionDetails"
 import Typography from "@material-ui/core/Typography"
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore"
+
+import Footer from "../components/footer"
 
 // styles
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
     fontWeight: 500,
-    backgroundColor: "#00e676",
+    paddingLeft: "3%",
+    paddingRight: "3%",
+    margin: "0",
+    height: "100%",
     fontFamily: [
       "-apple-system",
       "BlinkMacSystemFont",
@@ -32,17 +33,22 @@ const useStyles = makeStyles(theme => ({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(","),
+    backgroundColor: "#00e676",
+    minHeight: "700px",
   },
   grid: {
-    marginTop: "10px",
-    boxShadow: "0 0 4px #1b5e20",
-    marginLeft: "5%",
-    marginRight: "5%",
+    marginTop: "15px",
+    backgroundColor: "#00e676",
+    borderRadius: "10px",
   },
   paper: {
+    // backgroundColor: "transparent",
     padding: theme.spacing(2),
-    textAlign: "center",
     color: theme.palette.text.secondary,
+    borderRadius: "10px",
+    height: "85%",
+    marginTop: "10px",
+    textAlign: "left",
   },
   inputLink: {
     width: "80%",
@@ -54,17 +60,33 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1),
-    backgroundColor: "#00e676",
-    fontWeight: "500",
+    backgroundColor: "#fff",
+    fontWeight: "bolder",
+    color: "#00e676",
+    border: "2px solid",
+    "&:hover": {
+      border: "2px solid lightgreen",
+      backgroundColor: "#00e676",
+      color: "white",
+    },
   },
   heading: {
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular,
-    textAlign: "left",
+    color: "#00e676",
   },
   bookmark_url: {
     fontSize: "20px",
+    fontWeight: "600",
     color: "#03a1fc",
+    overflowWrap: "break-word",
+    // wordWrap: "break-word",
+    // hyphens: "auto",
+  },
+  desc: {
+    fontSize: "20px",
+    fontWeight: "600",
+    overflowWrap: "break-word",
   },
 }))
 
@@ -90,105 +112,124 @@ const addBookmarkMutation = gql`
 export default function Home() {
   const classes = useStyles()
 
+  const [userInput, setUserInput] = useState({
+    userLink: "",
+    desc: "",
+  })
+
   const { loading, error, data } = useQuery(APOLLO_QUERY)
   const [addBookmark] = useMutation(addBookmarkMutation)
   // console.log(`data`, data)
 
-  let textfield
-  let desc
   const addBookmarkSubmit = e => {
     e.preventDefault()
     addBookmark({
       variables: {
-        url: textfield.value,
-        desc: desc.value,
+        url: userInput.userLink,
+        desc: userInput.desc,
       },
       refetchQueries: [{ query: APOLLO_QUERY }],
     })
-    textfield = ""
-    desc = ""
+    setUserInput({
+      userLink: "",
+      desc: "",
+    })
   }
 
   return (
     <div className={classes.root}>
-      <Grid item xs={12} className={classes.grid}>
-        <Paper className={classes.paper}>
-          <h2 style={{ color: "#059947", fontSize: "30px" }}>
-            Bookmark Application
+      <Grid container>
+        <Grid item xs={12} sm={12} className={classes.grid}>
+          <h2 style={{ color: "#fff", fontSize: "30px", textAlign: "center" }}>
+            Bookmark /\pp
           </h2>
-        </Paper>
-      </Grid>
-      <Grid item xs={12} className={classes.grid}>
-        <form onSubmit={addBookmarkSubmit}>
-          <Paper className={classes.paper}>
-            <TextareaAutosize
-              className={classes.inputLink}
-              ref={node => (textfield = node)}
-              aria-label="minimum height"
-              rowsMin={2}
-              placeholder="Enter Link"
-              required
-            />
-            <br />
-            <TextareaAutosize
-              className={classes.inputDesc}
-              ref={node => (desc = node)}
-              aria-label="minimum height"
-              rowsMin={2}
-              placeholder="Enter Description"
-              required
-            />
-            <br />
-            <Button
-              type="submit"
-              variant="contained"
-              color="default"
-              className={classes.button}
+        </Grid>
+        <Grid item xs={12} sm={12} className={classes.grid}>
+          <form onSubmit={addBookmarkSubmit}>
+            <Paper
+              className={classes.paper}
+              style={{ textAlign: "center", padding: "3%" }}
             >
-              Add Bookmark
-            </Button>
-          </Paper>
-        </form>
+              <TextareaAutosize
+                value={userInput.userLink}
+                onChange={e =>
+                  setUserInput(state => ({
+                    ...state,
+                    userLink: e.target.value,
+                  }))
+                }
+                className={classes.inputLink}
+                aria-label="minimum height"
+                rowsMin={2}
+                placeholder="Enter Link"
+                required
+              />
+              <br />
+              <TextareaAutosize
+                value={userInput.desc}
+                onChange={e =>
+                  setUserInput(state => ({ ...state, desc: e.target.value }))
+                }
+                className={classes.inputDesc}
+                aria-label="minimum height"
+                rowsMin={2}
+                placeholder="Enter Description"
+                required
+              />
+              <p style={{ textAlign: "center" }}>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="default"
+                  className={classes.button}
+                >
+                  Add Bookmark
+                </Button>
+              </p>
+            </Paper>
+          </form>
+        </Grid>
       </Grid>
-      <Grid item xs={12} className={classes.grid}>
-        {loading && <Paper className={classes.paper}>Loading...</Paper>}
-        {error && (
-          <Paper className={classes.paper}>Error: ${error.message}</Paper>
-        )}
-        {data && data.bookmark && (
-          <Paper className={classes.paper}>
-            <ul>
-              {data.bookmark.map(b => {
-                return (
-                  <Accordion key={b.id}>
-                    {/* bookmark link */}
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel1a-content"
-                      id="panel1a-header"
-                    >
-                      <Typography className={classes.heading}>
-                        <a
-                          href={b.url}
-                          component="button"
-                          variant="body2"
-                          className={classes.bookmark_url}
-                        >
-                          {b.url}
-                        </a>
-                      </Typography>
-                    </AccordionSummary>
 
-                    {/* bookmark description */}
-                    <AccordionDetails>
-                      <Typography>{b.desc}</Typography>
-                    </AccordionDetails>
-                  </Accordion>
-                )
-              })}
-            </ul>
-          </Paper>
-        )}
+      <Grid container spacing={3} className={classes.grid} >
+        <Grid item sm={12}>
+          {loading && <Paper className={classes.paper} >Loading...</Paper>}
+          {error && (
+            <Paper className={classes.paper}>Error: ${error.message}</Paper>
+          )}
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={1}>
+        {data &&
+          data.bookmark &&
+          data.bookmark.map((b, index) => {
+            // b = bookmark
+            return (
+              <Grid item xs={12} sm={4} key={index} className={classes.grid}>
+                <Paper elevation={3} className={classes.paper}>
+                  {/* bookmark link */}
+                  <Typography className={classes.heading}>
+                    <a
+                      href={b.url}
+                      component="button"
+                      variant="body2"
+                      className={classes.bookmark_url}
+                    >
+                      <span>{b.url}</span>
+                    </a>
+                  </Typography>
+
+                  {/* bookmark description */}
+                  <Typography className={classes.desc}>{b.desc}</Typography>
+                </Paper>
+              </Grid>
+            )
+          })}
+      </Grid>
+
+      <Grid item xs={12} sm={12}>
+        <Footer />
       </Grid>
     </div>
   )
