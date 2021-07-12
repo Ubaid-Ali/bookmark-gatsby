@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { useQuery, useMutation } from "@apollo/client"
 import gql from "graphql-tag"
 
-// material-ui
+// import material-ui
 import { makeStyles } from "@material-ui/core/styles"
 import Paper from "@material-ui/core/Paper"
 import Grid from "@material-ui/core/Grid"
@@ -33,41 +33,44 @@ const useStyles = makeStyles(theme => ({
       '"Segoe UI Emoji"',
       '"Segoe UI Symbol"',
     ].join(","),
-    backgroundColor: "#00e676",
+    backgroundColor: "#55B4B0",
     minHeight: "700px",
   },
   grid: {
     marginTop: "15px",
-    backgroundColor: "#00e676",
+    backgroundColor: "#55B4B0",
     borderRadius: "10px",
   },
   paper: {
     // backgroundColor: "transparent",
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-    borderRadius: "10px",
+    borderRadius: "5px 5px 10px 10px",
     height: "85%",
     marginTop: "10px",
     textAlign: "left",
   },
   inputLink: {
+    marginTop: "10px",
     width: "80%",
     fontSize: "20px",
   },
   inputDesc: {
+    marginTop: "10px",
     width: "80%",
     fontSize: "20px",
   },
   button: {
-    margin: theme.spacing(1),
-    backgroundColor: "#fff",
+    marginTop: "10px",
+    backgroundColor: "#55B4B0",
     fontWeight: "bolder",
-    color: "#00e676",
-    border: "2px solid",
+    color: "#fff",
+    border: "2px solid #55B4B0",
+    borderRadius: "7px",
     "&:hover": {
-      border: "2px solid lightgreen",
-      backgroundColor: "#00e676",
-      color: "white",
+      border: "2px solid #55B4B0",
+      backgroundColor: "#fff",
+      color: "#55B4B0",
     },
   },
   heading: {
@@ -191,14 +194,30 @@ export default function Home() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={3} className={classes.grid} >
-        <Grid item sm={12}>
-          {loading && <Paper className={classes.paper} >Loading...</Paper>}
-          {error && (
-            <Paper className={classes.paper}>Error: ${error.message}</Paper>
-          )}
+      {loading && (
+        <Grid container spacing={3} className={classes.grid}>
+          <Grid item sm={12}>
+            <Paper
+              className={classes.paper}
+              style={{ textAlign: "center", color: "#55B4B0" }}
+            >
+              Loading...
+            </Paper>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+      {error && (
+        <Grid container spacing={3} className={classes.grid}>
+          <Grid item sm={12}>
+            <Paper
+              className={classes.paper}
+              style={{ textAlign: "center", color: "#55B4B0" }}
+            >
+              Error: ${error.message}
+            </Paper>
+          </Grid>
+        </Grid>
+      )}
 
       <Grid container spacing={1}>
         {data &&

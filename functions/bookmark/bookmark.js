@@ -23,7 +23,7 @@ const typeDefs = gql`
 `
 
 //  D U M M Y  D A T A
-// const authors = [
+// const bookmarks = [
 //   { id: 001, url: "google.com", desc: "This is g description" },
 //   { id: 002, url: "youtube.com", desc: "This is yt description" }
 // ]

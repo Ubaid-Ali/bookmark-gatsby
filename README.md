@@ -1,7 +1,14 @@
-Project is about a Bokmark Web Application
-Links Bookmarking
+# Bookmark Application
+### See live: https://bookmark-gatsby-ubaid.netlify.app/
+* [Gatsby](https://www.gatsbyjs.com/docs/): The static site generator.
+* [FaunaDB](https://fauna.com/): For Database
+* [Netlify](https://www.netlify.com/): for deployment and Serverless function
+* Apollo client and Graphql
+## Features:
+* Add Bookmark and Description
+## Display
+* Form
+* All Bookmarks
 
-Initialize Project and Commands
-- gatsby new bookmark-gatsby https://github.com/gatsbyjs/gatsby-starter-hello-world
-- npm install @apollo/client graphql
-- npm install --save cross-fetch
+Initialize Project
+* gatsby new bookmark-gatsby https://github.com/gatsbyjs/gatsby-starter-hello-world
